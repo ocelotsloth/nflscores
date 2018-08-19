@@ -19,7 +19,7 @@ Simply type `nflscores` after installing the binary. If somebody actually
 sees this project and would like me to write better documentation, open an
 issue. I'd be happy to write something if it would actually be of use.
 
-## Archetecture
+## Architecture
 
 Note that the library I defined is in the `github.com/ocelotsloth/nflscores`
 package, while the actual executable command is defined in the
