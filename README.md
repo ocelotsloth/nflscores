@@ -15,9 +15,8 @@ be distributing precompiled binaries.
 
 ## Usage
 
-Simply type `nflscores` after installing the binary. If somebody actually
-sees this project and would like me to write better documentation, open an
-issue. I'd be happy to write something if it would actually be of use.
+Simply type `nflscores` after installing the binary. To bring up the help
+message.
 
 ## Architecture
 
