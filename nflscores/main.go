@@ -1,46 +1,58 @@
 package main
 
 import (
-	"encoding/csv"
 	"log"
 	"os"
+	"sort"
 
 	"github.com/ocelotsloth/nflscores"
+
+	"github.com/urfave/cli"
 )
 
 func main() {
-	w := csv.NewWriter(os.Stdout)
+	app := cli.NewApp()
+	app.Name = "nflscores"
+	app.Usage = "Scrapes nfl game scores."
+	app.Version = "1.1.0"
 
-	if err := w.Write(nflscores.GetGameHeaders()); err != nil {
-		log.Fatalln("error writing record to csv:", err)
+	app.Commands = []cli.Command{
+		{
+			Name:    "dump",
+			Aliases: []string{"d"},
+			Usage:   "dump csv contents to stdout",
+			Action: func(c *cli.Context) error {
+				nflscores.WriteCSV(os.Stdout)
+				return nil
+			},
+		},
+		{
+			Name:    "csv",
+			Aliases: []string{"c"},
+			Usage:   "Write csv to `FILE`",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "file, f",
+					Usage: "Specify `FILE` location.",
+				},
+			},
+			Action: func(c *cli.Context) error {
+				file := c.String("file")
+				if file == "" {
+					cli.ShowCommandHelp(c, "csv")
+				} else {
+					nflscores.WriteFile(file)
+				}
+				return nil
+			},
+		},
 	}
 
-	// Scrape the available years
-	years := nflscores.ScrapeYears()
+	sort.Sort(cli.FlagsByName(app.Flags))
+	sort.Sort(cli.CommandsByName(app.Commands))
 
-	// Loop through each year
-	for _, year := range years {
-		// Scrape the available weeks and week names in a given year
-		weekIDs, weekNames := nflscores.ScrapeWeeks(year)
-
-		// Loop through each week in a given year
-		for index := range weekIDs {
-			// Scrape all game data from a given week in a given year
-			newGames := nflscores.ScrapeGames(year, weekIDs[index], weekNames[index])
-
-			// Append each new game to the running slice of games
-			for _, newGame := range newGames {
-				if err := w.Write(newGame.ToRow()); err != nil {
-					log.Fatalln("error writing record to csv:", err)
-				}
-			} // Append
-		} // Loop through weeks
-	} // Loop through years
-
-	// Write any buffered data to the underlying writer (standard output).
-	w.Flush()
-
-	if err := w.Error(); err != nil {
+	err := app.Run(os.Args)
+	if err != nil {
 		log.Fatal(err)
 	}
 
