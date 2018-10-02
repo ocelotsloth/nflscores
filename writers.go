@@ -2,13 +2,28 @@ package nflscores
 
 import (
 	"encoding/csv"
+	"fmt"
+	"io"
 	"log"
 	"os"
 )
 
-// WriteStdout scrapes games and writes to Stdout
-func WriteStdout() {
-	w := csv.NewWriter(os.Stdout)
+// WriteFile writes to a given filename
+func WriteFile(fileName string) {
+	file, err := os.Create(fileName)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+
+	WriteCSV(file)
+	file.Close()
+	return
+}
+
+// WriteCSV scrapes games and writes to given io.Writer
+func WriteCSV(output io.Writer) {
+	w := csv.NewWriter(output)
 
 	if err := w.Write(GetGameHeaders()); err != nil {
 		log.Fatalln("error writing record to csv:", err)

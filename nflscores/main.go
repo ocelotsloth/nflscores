@@ -16,29 +16,33 @@ func main() {
 	app.Usage = "Scrapes nfl game scores."
 	app.Version = "1.1.0"
 
-	app.Flags = []cli.Flag{
-		cli.StringFlag{
-			Name:  "file, f",
-			Usage: "Specify `FILE` location.",
-			Value: ".",
-		},
-	}
-
 	app.Commands = []cli.Command{
 		{
 			Name:    "dump",
 			Aliases: []string{"d"},
 			Usage:   "dump csv contents to stdout",
 			Action: func(c *cli.Context) error {
-				nflscores.WriteStdout()
+				nflscores.WriteCSV(os.Stdout)
 				return nil
 			},
 		},
 		{
 			Name:    "csv",
 			Aliases: []string{"c"},
-			Usage:   "Write csv to `FILE",
+			Usage:   "Write csv to `FILE`",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "file, f",
+					Usage: "Specify `FILE` location.",
+				},
+			},
 			Action: func(c *cli.Context) error {
+				file := c.String("file")
+				if file == "" {
+					cli.ShowCommandHelp(c, "csv")
+				} else {
+					nflscores.WriteFile(file)
+				}
 				return nil
 			},
 		},
