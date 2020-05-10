@@ -7,7 +7,7 @@ unless somebody opens an issue.
 
 ## Installing
 
-`go get github.com/ocelotsloth/nflscores/nflscores` should get you where you
+`go get git.sr.ht/~ocelotsloth/nflscores/nflscores` should get you where you
 need to go.
 
 You will need to install golang first, of course. At this time I will not
@@ -20,8 +20,8 @@ message.
 
 ## Architecture
 
-Note that the library I defined is in the `github.com/ocelotsloth/nflscores`
+Note that the library I defined is in the `git.sr.ht/~ocelotsloth/nflscores`
 package, while the actual executable command is defined in the
-`github.com/ocelotsloth/nflscores/nflscores` package. You need to install the
+`git.sr.ht/~ocelotsloth/nflscores/nflscores` package. You need to install the
 executable to work with this tool. Look in that directory for the `main.go`
 file if you are looking to read how this tool functions.

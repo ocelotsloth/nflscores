@@ -5,7 +5,7 @@ import (
 	"os"
 	"sort"
 
-	"github.com/ocelotsloth/nflscores"
+	"git.sr.ht/~ocelotsloth/nflscores"
 
 	"github.com/urfave/cli"
 )
